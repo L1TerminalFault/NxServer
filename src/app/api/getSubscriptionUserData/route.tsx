@@ -13,7 +13,7 @@ export async function GET() {
   const userData = await client.users.getUser(subscriptionId[0]);
 
   const data = {
-    fullName: `${userData.firstName} ${userData.lastName}`,
+    fullName: userData.firstName + (userData.lastName ? " " + userData.lastName : ""),
     profileImage: userData.imageUrl,
   };
 

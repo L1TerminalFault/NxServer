@@ -1,9 +1,9 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function GET(request: Request) {
-  const { userId } = await auth();
+  // const { userId } = await auth();
   const client = await clerkClient();
-  const subscriberId = request.url.split("?subscriberId=")[1];
+  const [subscriberId, userId] = request.url.split("?subscriber=")[1].split("&userId=");
 
   if (!userId)
     return Response.json({ status: "error", message: "You need to sign in " });
@@ -19,9 +19,10 @@ export async function GET(request: Request) {
 
   await client.users.updateUserMetadata(userId, {
     publicMetadata: {
-      clients: [...clientsList, userId],
+      clients: clientsList ? [...clientsList, subscriberId] : [subscriberId],
     },
   });
 
+  console.log("successfully added user ", clientsList, userId)
   return Response.json({ status: "success" });
 }

@@ -6,11 +6,21 @@ export async function GET() {
 
   if (!userId)
     return Response.json({ status: "error", message: "You need to sign in " });
-  // const userInfo = await client.users.getUser(userId)
 
-  // const {subscription} = userInfo.publicMetadata
-  // const channelId = subscription[0]
-  // const newSubscription = []
+  const userInfo = await client.users.getUser(userId)
+  const {subscription} = userInfo.publicMetadata
+  const sourceUserId = subscription[0]
+
+  const sourceUserClients = await client.users.getUser(sourceUserId).publicMetadata?.clients
+
+  const filteredSourceClients = sourceUserClients?.filter((clientId) => clientId !== userId) || []
+
+  await client.users.updateUserMetadata(sourceUserId, {
+    publicMetadata: {
+      clients: filteredSourceClients,
+    },
+  });
+
   await client.users.updateUserMetadata(userId, {
     publicMetadata: {
       subscription: [],
