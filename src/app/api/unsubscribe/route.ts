@@ -7,13 +7,17 @@ export async function GET() {
   if (!userId)
     return Response.json({ status: "error", message: "You need to sign in " });
 
-  const userInfo = await client.users.getUser(userId)
-  const {subscription} = userInfo.publicMetadata
-  const sourceUserId = subscription[0]
+  const userInfo = await client.users.getUser(userId);
+  const { subscription } = userInfo.publicMetadata as {
+    subscription: string[];
+  };
+  const sourceUserId = subscription[0];
 
-  const sourceUserClients = await client.users.getUser(sourceUserId).publicMetadata?.clients
+  const sourceUserClients = (await client.users.getUser(sourceUserId))
+    .publicMetadata?.clients as string[] | undefined;
 
-  const filteredSourceClients = sourceUserClients?.filter((clientId) => clientId !== userId) || []
+  const filteredSourceClients =
+    sourceUserClients?.filter((clientId: string) => clientId !== userId) || [];
 
   await client.users.updateUserMetadata(sourceUserId, {
     publicMetadata: {

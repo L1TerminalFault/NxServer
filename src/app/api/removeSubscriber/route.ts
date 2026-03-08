@@ -1,12 +1,14 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { /* auth, */ clerkClient } from "@clerk/nextjs/server";
 
 export async function GET(request: Request) {
   // const { userId } = await auth();
   const client = await clerkClient();
-  const [subscriberId, userId] = request.url.split("?subscriberId=")[1].split("&userId=");
+  const [subscriberId, userId] = request.url
+    .split("?subscriberId=")[1]
+    .split("&userId=");
 
-  console.log("user ", userId)
-  console.log("subscriber ", subscriberId)
+  console.log("user ", userId);
+  console.log("subscriber ", subscriberId);
   if (!userId)
     return Response.json({ status: "error", message: "You need to sign in " });
 
@@ -18,18 +20,16 @@ export async function GET(request: Request) {
 
   const clientsList = (await client.users.getUser(userId)).publicMetadata
     ?.clients as string[];
-    
-  console.log(clientsList)
 
-  let filteredClients
+  console.log(clientsList);
+
+  let filteredClients;
   if (clientsList) {
-    filteredClients = clientsList.filter(
-    (client) => client !== subscriberId,
-  );
+    filteredClients = clientsList.filter((client) => client !== subscriberId);
   } else {
-    return Response.json({ status: "success" })
+    return Response.json({ status: "success" });
   }
-  console.log("filtered ", filteredClients)
+  console.log("filtered ", filteredClients);
 
   await client.users.updateUserMetadata(userId, {
     publicMetadata: {

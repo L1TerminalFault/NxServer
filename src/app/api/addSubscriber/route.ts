@@ -1,9 +1,11 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { /* auth, */ clerkClient } from "@clerk/nextjs/server";
 
 export async function GET(request: Request) {
   // const { userId } = await auth();
   const client = await clerkClient();
-  const [subscriberId, userId] = request.url.split("?subscriber=")[1].split("&userId=");
+  const [subscriberId, userId] = request.url
+    .split("?subscriber=")[1]
+    .split("&userId=");
 
   if (!userId)
     return Response.json({ status: "error", message: "You need to sign in " });
@@ -23,6 +25,6 @@ export async function GET(request: Request) {
     },
   });
 
-  console.log("successfully added user ", clientsList, userId)
+  console.log("successfully added user ", clientsList, userId);
   return Response.json({ status: "success" });
 }
