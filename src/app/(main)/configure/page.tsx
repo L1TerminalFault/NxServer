@@ -17,7 +17,7 @@ type UserData = {
 export default function Configure() {
   const { user, isLoaded, isSignedIn } = useUser();
   const [loading, setLoading] = useState(true);
-  const [loadingData, setLoadingData] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
   const [unsubscribeLoading, setUnsubscribeLoading] = useState(false);
   const [subscription, setSubscription] = useState<string[] | null>(null);
   const [subscriptionData, setSubscriptionData] = useState<UserData | null>(
@@ -66,11 +66,10 @@ export default function Configure() {
       !subscriptionData
     ) {
       fetchSubscriptionData();
-    }
+    } else setLoadingData(false)
   }, [isLoaded, isSignedIn, subscription, subscriptionData]);
 
   const fetchSubscriptionData = async () => {
-    setLoadingData(true);
     try {
       const res = await (await fetch("/api/getSubscriptionUserData")).json();
       if (res.status === "success") setSubscriptionData(res.data);
