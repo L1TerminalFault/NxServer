@@ -49,7 +49,7 @@ export default function Notification() {
 
   const refresh = async (channelId: string) => {
     setRefreshing(true);
-    if (polling) return console.log("refresh cancelled because of lock poll");
+    if (polling) return; // console.log("refresh cancelled because of lock poll");
     await fetchBase(channelId);
     setRefreshing(false);
   };
@@ -57,19 +57,17 @@ export default function Notification() {
   useEffect(() => {
     if (!sublist || !sublist[0]?.length) return;
 
-    console.log("polling started");
     const poll = async () => {
-      console.log("polling.......");
+      // console.log("polling.......");
       setPolling(true);
       await fetchBase(sublist[0]);
       setPolling(false);
       setRefreshing(false);
-      console.log("polling complete");
+      // console.log("polling complete");
     };
 
     const timer = setInterval(() => {
-      if (refreshing || polling)
-        return console.log("skipping poll because lock is held");
+      if (refreshing || polling) return; // console.log("skipping poll because lock is held");
       poll();
     }, POLLING_INTERVAL);
 
@@ -79,7 +77,6 @@ export default function Notification() {
   useEffect(() => {
     if (!isSignedIn && !isLoaded) return;
 
-    console.log("sublist ", sublist);
     if (!sublist || !sublist[0]?.length) {
       setErrorMessages(
         "You are not subscribed to any channel yet go to configure tab to do so",
@@ -110,12 +107,12 @@ export default function Notification() {
             if (!sublist || !sublist[0]?.length) return;
             refresh(sublist[0]);
           }}
-          className={`${!sublist || !sublist[0]?.length ? "hidden" : ""} select-none fixed flex items-center gap-2 z-20 backdrop-blur-xl bottom-20 right-5 text-lg rounded-full shadow-lg shadow-black/30 bg-white/10 hover:bg-white/15 transition-all py-1.5 px-4 cursor-pointer`}
+          className={`${!sublist || !sublist[0]?.length ? "hidden" : ""} select-none fixed flex items-center gap-2 z-20 backdrop-blur-xl bottom-28 right-5 text-lg rounded-full shadow-lg shadow-black/30 bg-white/10 hover:bg-white/15 transition-all //py-1.5 p-4 cursor-pointer`}
         >
           <FaCircleNotch
             className={`${refreshing ? "animate-spin" : ""} rotate-45`}
           />
-          <div>Refresh</div>
+          {/* <div>Refresh</div> */}
         </div>
 
         {loadingMessages || !isLoaded ? (

@@ -7,7 +7,7 @@ import { VERSION_STRING } from "@/lib/utils";
 export default function TitleBar() {
   return (
     <div className="z-50">
-      <div className="w-full flex items-center justify-between fixed top-0 p-2 px-5 text-xl border-transparent backdrop-blur-lg transition-all border-b-gray-700/30 border bg-transparent">
+      <div className="w-full shadow-lg shadow-black/30 flex items-center justify-between fixed top-0 p-2 px-5 text-xl border-transparent backdrop-blur-lg transition-all border-b-gray-700/30 border bg-transparent">
         <div className="flex items-center h-12 w-full justify-between">
           <div>
             NxServer{" "}
