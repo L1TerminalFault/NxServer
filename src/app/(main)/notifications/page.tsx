@@ -112,6 +112,7 @@ export default function Notification() {
         >
           <RiRefreshLine // FaCircleNotch
             className={`${refreshing ? "animate-spin" : ""} rotate-45`}
+	    size={20}
           />
           {/* <div>Refresh</div> */}
         </div>
