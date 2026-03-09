@@ -85,7 +85,7 @@ export default function Notification() {
       );
       setLoadingMessages(false);
       return;
-    }
+    } else setErrorMessages(null);
 
     fetchMessages(sublist[0]);
   }, [isSignedIn, isLoaded, user, sublist]);
