@@ -25,7 +25,7 @@ export default function Notification() {
       if (!isSignedIn) document.getElementById("signIn")?.click();
       else setSublist(user?.publicMetadata?.subscription as string[]);
     }
-  }, [isLoaded, isSignedIn, user]);
+  }, [isLoaded, isSignedIn, user, user?.publicMetadata?.subscription]);
 
   const fetchBase = async (channelId: string, errorLog: boolean = true) => {
     try {
@@ -79,6 +79,7 @@ export default function Notification() {
   useEffect(() => {
     if (!isSignedIn && !isLoaded) return;
 
+    console.log("sublist ", sublist);
     if (!sublist || !sublist[0]?.length) {
       setErrorMessages(
         "You are not subscribed to any channel yet go to configure tab to do so",
