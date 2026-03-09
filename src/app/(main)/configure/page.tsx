@@ -16,7 +16,7 @@ type UserData = {
 
 export default function Configure() {
   const { user, isLoaded, isSignedIn } = useUser();
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [loadingData, setLoadingData] = useState(true);
   const [unsubscribeLoading, setUnsubscribeLoading] = useState(false);
   const [subscription, setSubscription] = useState<string[] | null>(null);
@@ -28,13 +28,16 @@ export default function Configure() {
     null,
   );
 
-  useEffect(() => {
-    if (isLoaded) setLoading(false);
-  }, [isLoaded]);
+  // useEffect(() => {
+  //   if (isLoaded) setLoading(false);
+  // }, [isLoaded]);
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn && !loading)
+    if (!isLoaded) return setLoadingData(false);
+    else if (!isSignedIn) {
+      setLoadingData(false);
       return document.getElementById("signIn")?.click();
+    }
 
     const userSignedIn = user;
     const subscriptionList = userSignedIn?.publicMetadata
@@ -44,32 +47,34 @@ export default function Configure() {
 
     let pollerIntervalId: NodeJS.Timeout;
 
-    if (isSignedIn && isLoaded && (!subscription?.length || !subscription)) {
+    if (!subscription?.length || !subscription) {
       pollerIntervalId = setInterval(async () => {
         if (polling) return;
 
         setPolling(true);
         await user.reload();
         setPolling(false);
-      }, 10000);
-    }
+      }, 15000);
+    } else if (subscriptionData) setLoadingData(false);
+    else fetchSubscriptionData();
 
     return () => clearInterval(pollerIntervalId);
-  }, [isLoaded, isSignedIn, user, polling, subscription, loading]);
+  }, [isLoaded, isSignedIn, user, polling, subscription, subscriptionData]);
 
-  useEffect(() => {
-    if (
-      isSignedIn &&
-      isLoaded &&
-      subscription &&
-      subscription?.length &&
-      !subscriptionData
-    ) {
-      fetchSubscriptionData();
-    } else setLoadingData(false)
-  }, [isLoaded, isSignedIn, subscription, subscriptionData]);
+  // useEffect(() => {
+  //   if (
+  //     isSignedIn &&
+  //     isLoaded &&
+  //     subscription &&
+  //     subscription?.length &&
+  //     !subscriptionData
+  //   ) {
+  //     fetchSubscriptionData();
+  //   } else setLoadingData(false);
+  // }, [isLoaded, isSignedIn, subscription, subscriptionData]);
 
   const fetchSubscriptionData = async () => {
+    setLoadingData(true);
     try {
       const res = await (await fetch("/api/getSubscriptionUserData")).json();
       if (res.status === "success") setSubscriptionData(res.data);
@@ -96,7 +101,7 @@ export default function Configure() {
 
   return (
     <div className="flex w-full h-full">
-      {loading || loadingData ? (
+      {!isLoaded || loadingData ? (
         <Loader />
       ) : (
         <>
@@ -147,7 +152,7 @@ export default function Configure() {
                 }
                 <div
                   onClick={unsubscribe}
-                  className={`px-6 p-2 gap-2 items-center ${unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full text-white bg-white/5 hover:bg-white/10 select-none`}
+                  className={`px-6 p-2 gap-2 items-center ${unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
                 >
                   <IoMdRemoveCircle size={23} />
                   Unsubscribe
