@@ -3,7 +3,7 @@
 import { useUser, Show, SignInButton } from "@clerk/nextjs";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
-import { FaUserCog } from "react-icons/fa";
+import { FaUserCog, FaCircleNotch } from "react-icons/fa";
 import { IoMdRemoveCircle } from "react-icons/io";
 import Image from "next/image";
 
@@ -88,6 +88,7 @@ export default function Configure() {
 
   const unsubscribe = async () => {
     setUnsubscribeLoading(true);
+    setErrorUnsubscribing(null);
     try {
       const res = await (await fetch("/api/unsubscribe")).json();
       if (res.status === "error") setErrorUnsubscribing(res.message);
@@ -101,7 +102,7 @@ export default function Configure() {
 
   return (
     <div className="flex w-full h-full">
-      {!isLoaded || loadingData ? (
+      {!isLoaded ? (
         <Loader />
       ) : (
         <>
@@ -116,63 +117,74 @@ export default function Configure() {
             </div>
           </Show>
 
-          <Show when="signed-in">
-            {subscription &&
-            subscription[0]?.length /* new */ &&
-            subscriptionData ? (
-              <div className="w-full gap-3 pt-14 text-gray-400 items-center flex-col flex justify-center text-lg">
-                {
-                  unsubscribeLoading ? (
-                    <Loader />
-                  ) : errorUnsubscribing ? (
-                    <div>{errorUnsubscribing}</div>
-                  ) : (
-                    /* subscriptionData ? */ <div className="flex flex-col gap-0">
-                      <div className="text-gray-500 text-sm //pl-5">
-                        You have subscribed to
-                      </div>
-                      <div className="flex gap-4 p-4 items-center justify-center">
-                        <Image
-                          alt=""
-                          src={subscriptionData?.profileImage}
-                          className="rounded-full"
-                          width={50}
-                          height={50}
+          {!isSignedIn ? null : (
+            <>
+              {loadingData ? (
+                <Loader />
+              ) : (
+                <Show when="signed-in">
+                  {!subscription || !subscription[0]?.length ? (
+                    <div className="flex items-center flex-col gap-6 text-gray-400 justify-center w-full h-full">
+                      <div>Scan this QR code to access notifications</div>
+
+                      <div className="bg-white p-0 rounded-2xl">
+                        <QRCodeSVG
+                          value={user?.id || ""}
+                          size={280}
+                          level="H"
+                          className="p-4"
                         />
-                        <div className="text-white text-lg">
-                          {subscriptionData.fullName}
-                        </div>
                       </div>
                     </div>
-                  ) /* : (
-                  <div>
-                    Already configured, couldn&lsquo;t get subscription data
-                  </div>
-                ) */
-                }
-                <div
-                  onClick={unsubscribe}
-                  className={`px-6 p-2 gap-2 items-center ${unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
-                >
-                  <IoMdRemoveCircle size={23} />
-                  Unsubscribe
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center flex-col gap-6 text-gray-400 justify-center w-full h-full">
-                <div>Scan this QR code to access notifications</div>
-
-                <div className="bg-white p-0 rounded-2xl">
-                  <QRCodeSVG
-                    value={user?.id || ""}
-                    size={280}
-                    level="H"
-                    className="p-4"
-                  />
-                </div>
-              </div>
-            )}
-          </Show>
+                  ) : (
+                    <div className="w-full gap-3 pt-14 text-gray-400 items-center flex-col flex justify-center text-lg">
+                      {!subscriptionData ? (
+                        <div>
+                          Already configured, couldn&lsquo;t get subscription
+                          data
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-0">
+                          <div className="text-gray-500 text-sm //pl-5">
+                            You have subscribed to
+                          </div>
+                          <div className="flex gap-4 p-4 items-center justify-center">
+                            <Image
+                              alt=""
+                              src={subscriptionData?.profileImage}
+                              className="rounded-full"
+                              width={50}
+                              height={50}
+                            />
+                            <div className="text-white text-lg">
+                              {subscriptionData.fullName}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {errorUnsubscribing ? (
+                        <div>{errorUnsubscribing}</div>
+                      ) : null}
+                      <div
+                        onClick={unsubscribe}
+                        className={`px-6 p-2 gap-2 items-center ${unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
+                      >
+                        {unsubscribeLoading ? (
+                          <FaCircleNotch
+                            size={23}
+                            className="//animate-bounce animate-spin"
+                          />
+                        ) : (
+                          <IoMdRemoveCircle size={23} />
+                        )}
+                        Unsubscribe
+                      </div>
+                    </div>
+                  )}
+                </Show>
+              )}
+            </>
+          )}
         </>
       )}
     </div>
