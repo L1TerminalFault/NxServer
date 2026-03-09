@@ -12,7 +12,7 @@ export default function Home() {
       </div>
       <div className="bg-white/5 gap-7 p-10 flex items-center rounded-3xl">
         <FaCogs className="shrink-0" size={50} />
-        To configure scan the QR code in the configure tab then access it them
+        To configure scan the QR code in the configure tab then view notifications
         in notifications tab
       </div>
       <div className="bg-white/5 gap-7 p-10 flex items-center rounded-3xl">

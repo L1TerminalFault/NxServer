@@ -2,27 +2,32 @@
 
 import { useEffect, useState } from "react";
 import { Show, SignInButton, useUser } from "@clerk/nextjs";
-import { FaUserCog } from "react-icons/fa";
+import { FaCircleNotch, FaUserCog } from "react-icons/fa";
 import { RiListSettingsFill } from "react-icons/ri";
 import { TbPlaylistX } from "react-icons/tb";
 
 import { Message } from "@/lib/types";
-
 import Loader from "@/app/components/Loader";
+
+const POLLING_INTERVAL = 10000;
 
 export default function Notification() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [loadingMessages, setLoadingMessages] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string | null>(null);
+  const [polling, setPolling] = useState(false);
+  const [sublist, setSublist] = useState<string[] | null>(null);
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn) document.getElementById("signIn")?.click();
-  }, [isLoaded, isSignedIn]);
+    if (isLoaded) {
+      if (!isSignedIn) document.getElementById("signIn")?.click();
+      else setSublist(user?.publicMetadata?.subscription as string[]);
+    }
+  }, [isLoaded, isSignedIn, user]);
 
-  const fetchMessages = async (channelId: string) => {
-    setLoadingMessages(true);
-
+  const fetchBase = async (channelId: string, errorLog: boolean = true) => {
     try {
       const dataRet = await (
         await fetch(
@@ -30,18 +35,49 @@ export default function Notification() {
         )
       ).json();
       if (dataRet.status === "success") setMessages(dataRet.messages);
-      else setErrorMessages(dataRet.message);
+      else if (errorLog) setErrorMessages(dataRet.message);
     } catch (error) {
-      setErrorMessages(typeof error == "string" ? error : "");
-    } finally {
-      setLoadingMessages(false);
+      if (errorLog) setErrorMessages(typeof error == "string" ? error : "");
     }
   };
 
+  const fetchMessages = async (channelId: string) => {
+    setLoadingMessages(true);
+    await fetchBase(channelId);
+    setLoadingMessages(false);
+  };
+
+  const refresh = async (channelId: string) => {
+    setRefreshing(true);
+    if (polling) return console.log("refresh cancelled because of lock poll");
+    await fetchBase(channelId);
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    if (!sublist || !sublist[0]?.length) return;
+
+    console.log("polling started");
+    const poll = async () => {
+      console.log("polling.......");
+      setPolling(true);
+      await fetchBase(sublist[0]);
+      setPolling(false);
+      setRefreshing(false);
+      console.log("polling complete");
+    };
+
+    const timer = setInterval(() => {
+      if (refreshing || polling)
+        return console.log("skipping poll because lock is held");
+      poll();
+    }, POLLING_INTERVAL);
+
+    return () => clearInterval(timer);
+  }, [polling, refreshing, sublist]);
+
   useEffect(() => {
     if (!isSignedIn && !isLoaded) return;
-
-    const sublist = user?.publicMetadata?.subscription as string[];
 
     if (!sublist || !sublist[0]?.length) {
       setErrorMessages(
@@ -52,7 +88,7 @@ export default function Notification() {
     }
 
     fetchMessages(sublist[0]);
-  }, [isSignedIn, isLoaded, user]);
+  }, [isSignedIn, isLoaded, user, sublist]);
 
   return (
     <div className="flex w-full h-full">
@@ -68,6 +104,19 @@ export default function Notification() {
       </Show>
 
       <Show when="signed-in">
+        <div
+          onClick={() => {
+            if (!sublist || !sublist[0]?.length) return;
+            refresh(sublist[0]);
+          }}
+          className={`${!sublist || !sublist[0]?.length ? "hidden" : ""} select-none fixed flex items-center gap-2 z-20 backdrop-blur-xl bottom-20 right-5 text-lg rounded-full shadow-lg shadow-black/30 bg-white/10 hover:bg-white/15 transition-all py-1.5 px-4 cursor-pointer`}
+        >
+          <FaCircleNotch
+            className={`${refreshing ? "animate-spin" : ""} rotate-45`}
+          />
+          <div>Refresh</div>
+        </div>
+
         {loadingMessages || !isLoaded ? (
           <Loader />
         ) : errorMessages ? (

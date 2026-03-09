@@ -112,35 +112,39 @@ export default function Configure() {
           </Show>
 
           <Show when="signed-in">
-            {subscription && subscription[0]?.length ? (
+            {subscription &&
+            subscription[0]?.length /* new */ &&
+            subscriptionData ? (
               <div className="w-full gap-3 pt-14 text-gray-400 items-center flex-col flex justify-center text-lg">
-                {unsubscribeLoading ? (
-                  <Loader />
-                ) : errorUnsubscribing ? (
-                  <div>{errorUnsubscribing}</div>
-                ) : subscriptionData ? (
-                  <div className="flex flex-col gap-0">
-                    <div className="text-gray-500 text-sm pl-5">
-                      You have subscribed to
-                    </div>
-                    <div className="flex gap-4 p-4 items-center justify-center">
-                      <Image
-                        alt=""
-                        src={subscriptionData?.profileImage}
-                        className="rounded-full"
-                        width={50}
-                        height={50}
-                      />
-                      <div className="text-white text-lg">
-                        {subscriptionData.fullName}
+                {
+                  unsubscribeLoading ? (
+                    <Loader />
+                  ) : errorUnsubscribing ? (
+                    <div>{errorUnsubscribing}</div>
+                  ) : (
+                    /* subscriptionData ? */ <div className="flex flex-col gap-0">
+                      <div className="text-gray-500 text-sm pl-5">
+                        You have subscribed to
+                      </div>
+                      <div className="flex gap-4 p-4 items-center justify-center">
+                        <Image
+                          alt=""
+                          src={subscriptionData?.profileImage}
+                          className="rounded-full"
+                          width={50}
+                          height={50}
+                        />
+                        <div className="text-white text-lg">
+                          {subscriptionData.fullName}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ) : (
+                  ) /* : (
                   <div>
                     Already configured, couldn&lsquo;t get subscription data
                   </div>
-                )}
+                ) */
+                }
                 <div
                   onClick={unsubscribe}
                   className={`px-6 p-2 gap-2 items-center ${unsubscribeLoading ? "hidden" : ""} flex rounded-full text-white bg-white/5 hover:bg-white/10 select-none`}
