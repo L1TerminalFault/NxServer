@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Show, SignInButton, useUser } from "@clerk/nextjs";
-import { FaCircleNotch, FaUserCog } from "react-icons/fa";
+import { /* FaCircleNotch, */ FaUserCog } from "react-icons/fa";
 import { RiListSettingsFill } from "react-icons/ri";
 import { TbPlaylistX } from "react-icons/tb";
+import { RiRefreshLine } from "react-icons/ri";
 
 import { Message } from "@/lib/types";
 import Loader from "@/app/components/Loader";
@@ -107,9 +108,9 @@ export default function Notification() {
             if (!sublist || !sublist[0]?.length) return;
             refresh(sublist[0]);
           }}
-          className={`${!sublist || !sublist[0]?.length ? "hidden" : ""} select-none fixed flex items-center gap-2 z-20 backdrop-blur-xl bottom-28 right-5 text-lg rounded-full shadow-lg shadow-black/30 bg-white/10 hover:bg-white/15 transition-all //py-1.5 p-4 cursor-pointer`}
+          className={`${!sublist || !sublist[0]?.length ? "hidden" : ""} select-none fixed flex items-center gap-2 z-20 backdrop-blur-xl bottom-24 right-5 text-lg rounded-full shadow-lg shadow-black/30 bg-white/10 hover:bg-white/15 transition-all //py-1.5 p-2 cursor-pointer`}
         >
-          <FaCircleNotch
+          <RiRefreshLine // FaCircleNotch
             className={`${refreshing ? "animate-spin" : ""} rotate-45`}
           />
           {/* <div>Refresh</div> */}
