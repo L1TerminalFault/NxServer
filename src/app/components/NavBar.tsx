@@ -36,6 +36,8 @@ export default function NavBar() {
     // alert(` ${followee?.getBoundingClientRect()?.y}`);
 
     if (follower) {
+      if (follower.style.display !== "inline")
+        follower.style.display = "inline";
       follower.style.left = `${followee?.getBoundingClientRect()?.x}px`;
       // if (window.innerWidth > 768)
       //   follower.style.top = `${followee?.getBoundingClientRect()?.y ? followee?.getBoundingClientRect()?.y - 8 : 0}px`;
@@ -49,7 +51,7 @@ export default function NavBar() {
     <div className="flex pb-4 //max-md: md:px-10 px-4 //max-md: w-full //md:h-full fixed //max-md: bottom-0 //md:top-0 //md:left-0">
       <div
         id="follower"
-        className="p-4 bg-white/5 absolute mt-2 transition-all z-10 rounded-full duration-400"
+        className="p-4 hidden bg-white/5 absolute mt-2 transition-all z-10 rounded-full duration-400"
       />
       <div className="flex //max-md: items-center //md:flex-col //md:gap-4 p-2 //max-md: rounded-full //md:h-full //max-md: backdrop-blur-lg w-full //max-md: bg-white/5 //max-md: justify-evenly //md:pt-34">
         {routes.map((route) => (
