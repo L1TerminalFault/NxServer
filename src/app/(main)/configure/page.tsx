@@ -123,7 +123,7 @@ export default function Configure() {
                     <div>{errorUnsubscribing}</div>
                   ) : (
                     /* subscriptionData ? */ <div className="flex flex-col gap-0">
-                      <div className="text-gray-500 text-sm pl-5">
+                      <div className="text-gray-500 text-sm //pl-5">
                         You have subscribed to
                       </div>
                       <div className="flex gap-4 p-4 items-center justify-center">
