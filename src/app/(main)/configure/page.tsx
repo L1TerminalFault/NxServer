@@ -3,7 +3,8 @@
 import { useUser, Show, SignInButton } from "@clerk/nextjs";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
-import { FaUserCog, FaCogs } from "react-icons/fa";
+import { FaUserCog } from "react-icons/fa";
+import { IoMdRemoveCircle } from "react-icons/io";
 import Image from "next/image";
 
 import Loader from "@/app/components/Loader";
@@ -147,10 +148,10 @@ export default function Configure() {
                 }
                 <div
                   onClick={unsubscribe}
-                  className={`px-6 p-2 gap-2 items-center ${unsubscribeLoading ? "hidden" : ""} flex rounded-full text-white bg-white/5 hover:bg-white/10 select-none`}
+                  className={`px-6 p-2 gap-2 items-center ${unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full text-white bg-white/5 hover:bg-white/10 select-none`}
                 >
-                  <FaCogs size={23} />
-                  Reconfigure
+                  <IoMdRemoveCircle size={23} />
+                  Unsubscribe
                 </div>
               </div>
             ) : (
