@@ -53,7 +53,7 @@ export default function NavBar() {
         id="follower"
         className="p-4 hidden bg-white/5 absolute mt-2 transition-all z-10 rounded-full duration-400"
       />
-      <div className="flex //max-md: items-center //md:flex-col //md:gap-4 shadow-lg shadow-black/30 p-2 //max-md: rounded-full //md:h-full //max-md: backdrop-blur-lg w-full //max-md: //bg-white/5 //max-md: justify-evenly //md:pt-34">
+      <div className="flex //max-md: items-center //md:flex-col //md:gap-4 shadow-lg shadow-black/30 p-2 //max-md: rounded-full //md:h-full //max-md: backdrop-blur-lg w-full //max-md: bg-[#ffffff05] //max-md: justify-evenly //md:pt-34">
         {routes.map((route) => (
           <Link
             id={`${route.href.includes(pathname) ? "followee" : ""}`}

@@ -28,10 +28,6 @@ export default function Configure() {
     null,
   );
 
-  // useEffect(() => {
-  //   if (isLoaded) setLoading(false);
-  // }, [isLoaded]);
-
   useEffect(() => {
     if (!isLoaded) return setLoadingData(false);
     else if (!isSignedIn) {
@@ -61,18 +57,6 @@ export default function Configure() {
 
     return () => clearInterval(pollerIntervalId);
   }, [isLoaded, isSignedIn, user, polling, subscription, subscriptionData]);
-
-  // useEffect(() => {
-  //   if (
-  //     isSignedIn &&
-  //     isLoaded &&
-  //     subscription &&
-  //     subscription?.length &&
-  //     !subscriptionData
-  //   ) {
-  //     fetchSubscriptionData();
-  //   } else setLoadingData(false);
-  // }, [isLoaded, isSignedIn, subscription, subscriptionData]);
 
   const fetchSubscriptionData = async () => {
     setLoadingData(true);
@@ -168,7 +152,7 @@ export default function Configure() {
                       ) : null}
                       <div
                         onClick={unsubscribe}
-                        className={`px-6 p-2 gap-2 items-center ${unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
+                        className={`px-6 p-2 gap-2 items-center $ {unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
                       >
                         {unsubscribeLoading ? (
                           <FaCircleNotch
