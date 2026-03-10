@@ -41,7 +41,7 @@ export default function Notification() {
     }
   };
 
-  const fetchMessages = async (channelId: string) => {
+  const fetchMessages = async (channelId: string | null) => {
     setLoadingMessages(true);
     await fetchBase(channelId);
     setLoadingMessages(false);
@@ -50,14 +50,14 @@ export default function Notification() {
   const refresh = async () => {
     setRefreshing(true);
     if (polling) return; // console.log("refresh cancelled because of lock poll");
-    await fetchBase(sublist[0]);
+    await fetchBase(sublist ? sublist[0] : null);
     setRefreshing(false);
   };
 
   const poll = async () => {
     if (refreshing || polling) return; // console.log("skipping poll because lock is held");
     setPolling(true);
-    await fetchBase(sublist[0]);
+    await fetchBase(sublist ? sublist[0] : null);
     setPolling(false);
     setRefreshing(false);
   };
@@ -79,7 +79,7 @@ export default function Notification() {
       return setLoadingMessages(false);
     } else {
       setSubscribed(true);
-      fetchMessages(sublistLocal[0]);
+      fetchMessages(sublistLocal ? sublistLocal[0] : null);
 
       const timer = setInterval(() => {
         poll();
