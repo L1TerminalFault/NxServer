@@ -157,8 +157,10 @@ export default function Notification() {
               ) : !subscribed ? (
                 <div className="w-full px-10 flex-col gap-8 text-center text-gray-400 flex items-center justify-center text-lg">
                   <RiListSettingsFill className="size-26" />
-                  <div>You are not subscribed to any channel yet</div>
-                  <div>Go to configure tab to do so</div>
+		  <div className="text-center flex flex-col gap-2 items-center">
+                    <div>You are not subscribed to any channel yet</div>
+                    <div>Go to configure tab to do so</div>
+		  </div>
                 </div>
               ) : !messages?.length ? (
                 <div className="w-full pt-14 text-gray-400 flex-col gap-8 flex items-center justify-center text-lg">
