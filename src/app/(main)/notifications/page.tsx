@@ -45,14 +45,14 @@ export default function Notification() {
   const refresh = async () => {
     setRefreshing(true);
     if (polling) return; // console.log("refresh cancelled because of lock poll");
-    await fetchBase(sublist[0]);
+    await fetchBase(sublist[0] || "");
     setRefreshing(false);
   };
 
   const poll = async () => {
     if (refreshing || polling) return; // console.log("skipping poll because lock is held");
     setPolling(true);
-    await fetchBase(sublist[0]);
+    await fetchBase(sublist[0] || "");
     setPolling(false);
     setRefreshing(false);
   };
