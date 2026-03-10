@@ -148,7 +148,7 @@ export default function Configure() {
                   {errorUnsubscribing ? <div>{errorUnsubscribing}</div> : null}
                   <div
                     onClick={unsubscribe}
-                    className={`px-6 p-2 gap-2 items-center $ {unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
+                    className={`px-6 p-2 gap-2 items-center transition-colors flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
                   >
                     {unsubscribeLoading ? (
                       <FaCircleNotch
