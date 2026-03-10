@@ -48,6 +48,7 @@ export default function Configure() {
     let pollerIntervalId: NodeJS.Timeout;
 
     if (!subscription?.length || !subscription) {
+      setLoadingData(false);
       pollerIntervalId = setInterval(async () => {
         if (polling) return;
 
