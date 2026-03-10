@@ -29,7 +29,8 @@ export default function Configure() {
   );
 
   useEffect(() => {
-    if (!isLoaded) return setLoadingData(false);
+    if (!isLoaded)
+      return; // setLoadingData(false);
     else if (!isSignedIn) {
       setLoadingData(false);
       return document.getElementById("signIn")?.click();
@@ -102,73 +103,66 @@ export default function Configure() {
             </div>
           </Show>
 
-          {!isSignedIn ? null : (
-            <>
-              {loadingData ? (
-                <Loader />
-              ) : (
-                <Show when="signed-in">
-                  {!subscription || !subscription[0]?.length ? (
-                    <div className="flex items-center flex-col gap-6 text-gray-400 justify-center w-full h-full">
-                      <div>Scan this QR code to access notifications</div>
+          {!isSignedIn ? null : loadingData ? (
+            <Loader />
+          ) : (
+            <Show when="signed-in">
+              {!subscription || !subscription[0]?.length ? (
+                <div className="flex items-center flex-col gap-6 text-gray-400 justify-center w-full h-full">
+                  <div>Scan this QR code to access notifications</div>
 
-                      <div className="bg-white p-0 rounded-2xl">
-                        <QRCodeSVG
-                          value={user?.id || ""}
-                          size={280}
-                          level="H"
-                          className="p-4"
-                        />
-                      </div>
+                  <div className="bg-white p-0 rounded-2xl">
+                    <QRCodeSVG
+                      value={user?.id || ""}
+                      size={280}
+                      level="H"
+                      className="p-4"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full gap-3 pt-14 text-gray-400 items-center flex-col flex justify-center text-lg">
+                  {!subscriptionData ? (
+                    <div>
+                      Already configured, couldn&lsquo;t get subscription data
                     </div>
                   ) : (
-                    <div className="w-full gap-3 pt-14 text-gray-400 items-center flex-col flex justify-center text-lg">
-                      {!subscriptionData ? (
-                        <div>
-                          Already configured, couldn&lsquo;t get subscription
-                          data
+                    <div className="flex flex-col gap-0">
+                      <div className="text-gray-500 text-sm //pl-5">
+                        You have subscribed to
+                      </div>
+                      <div className="flex gap-4 p-4 items-center justify-center">
+                        <Image
+                          alt=""
+                          src={subscriptionData?.profileImage}
+                          className="rounded-full"
+                          width={50}
+                          height={50}
+                        />
+                        <div className="text-white text-lg">
+                          {subscriptionData.fullName}
                         </div>
-                      ) : (
-                        <div className="flex flex-col gap-0">
-                          <div className="text-gray-500 text-sm //pl-5">
-                            You have subscribed to
-                          </div>
-                          <div className="flex gap-4 p-4 items-center justify-center">
-                            <Image
-                              alt=""
-                              src={subscriptionData?.profileImage}
-                              className="rounded-full"
-                              width={50}
-                              height={50}
-                            />
-                            <div className="text-white text-lg">
-                              {subscriptionData.fullName}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {errorUnsubscribing ? (
-                        <div>{errorUnsubscribing}</div>
-                      ) : null}
-                      <div
-                        onClick={unsubscribe}
-                        className={`px-6 p-2 gap-2 items-center $ {unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
-                      >
-                        {unsubscribeLoading ? (
-                          <FaCircleNotch
-                            size={23}
-                            className="//animate-bounce animate-spin"
-                          />
-                        ) : (
-                          <IoMdRemoveCircle size={23} />
-                        )}
-                        Unsubscribe
                       </div>
                     </div>
                   )}
-                </Show>
+                  {errorUnsubscribing ? <div>{errorUnsubscribing}</div> : null}
+                  <div
+                    onClick={unsubscribe}
+                    className={`px-6 p-2 gap-2 items-center $ {unsubscribeLoading ? "hidden" : ""} flex text-red-400 rounded-full bg-white/5 hover:bg-white/10 select-none`}
+                  >
+                    {unsubscribeLoading ? (
+                      <FaCircleNotch
+                        size={23}
+                        className="//animate-bounce animate-spin"
+                      />
+                    ) : (
+                      <IoMdRemoveCircle size={23} />
+                    )}
+                    Unsubscribe
+                  </div>
+                </div>
               )}
-            </>
+            </Show>
           )}
         </>
       )}
