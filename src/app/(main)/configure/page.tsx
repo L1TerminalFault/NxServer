@@ -16,7 +16,6 @@ type UserData = {
 
 export default function Configure() {
   const { user, isLoaded, isSignedIn } = useUser();
-  // const [loading, setLoading] = useState(true);
   const [loadingData, setLoadingData] = useState(true);
   const [unsubscribeLoading, setUnsubscribeLoading] = useState(false);
   const [subscription, setSubscription] = useState<string[] | null>(null);

@@ -12,6 +12,10 @@ import Loader from "@/app/components/Loader";
 
 const POLLING_INTERVAL = 10000;
 
+function justNow(time: string) {
+  return Math.abs(Date.now() - parseInt(time)) <= 60000;
+}
+
 export default function Notification() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [messages, setMessages] = useState<Message[] | null>(null);
@@ -157,10 +161,10 @@ export default function Notification() {
               ) : !subscribed ? (
                 <div className="w-full px-10 flex-col gap-8 text-center text-gray-400 flex items-center justify-center text-lg">
                   <RiListSettingsFill className="size-26" />
-		  <div className="text-center flex flex-col gap-2 items-center">
+                  <div className="text-center flex flex-col gap-2 items-center">
                     <div>You are not subscribed to any channel yet</div>
                     <div>Go to configure tab to do so</div>
-		  </div>
+                  </div>
                 </div>
               ) : !messages?.length ? (
                 <div className="w-full pt-14 text-gray-400 flex-col gap-8 flex items-center justify-center text-lg">
@@ -172,7 +176,7 @@ export default function Notification() {
                   {messages?.map((message) => (
                     <div
                       key={message._id}
-                      className={`${Math.abs(Date.now() - parseInt(message.time)) <= 60000 ? "bg-white/10 border border-gray-700/80" : "bg-[#ffffff11]"} flex justify-between gap-2 flex-row  p-1.5 rounded-2xl`}
+                      className={`${justNow(message.time) ? "bg-white/10 border border-gray-700/80" : "bg-[#ffffff11]"} flex justify-between gap-2 flex-row  p-1.5 rounded-2xl`}
                     >
                       <div className="flex flex-col gap-1.5">
                         <div className="font-bold px-3 pt-1">
@@ -185,8 +189,7 @@ export default function Notification() {
 
                       <div className="text-xs flex flex-col gap-1 p-1 justify-end text-nowrap">
                         <div className="text-gray-400">
-                          {Math.abs(Date.now() - parseInt(message.time)) <=
-                          60000 ? (
+                          {justNow(message.time) ? (
                             <span className="text-white font-bold">
                               Just now
                             </span>
