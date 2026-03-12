@@ -46,6 +46,7 @@ export default function Notification() {
   };
 
   const fetchMessages = async (channelId: string | null) => {
+	  console.log("fetching................")
     setLoadingMessages(true);
     await fetchBase(channelId);
     setLoadingMessages(false);
