@@ -46,7 +46,6 @@ export default function Notification() {
   };
 
   const fetchMessages = async (channelId: string | null) => {
-	  console.log("fetching................")
     setLoadingMessages(true);
     await fetchBase(channelId);
     setLoadingMessages(false);
@@ -84,7 +83,7 @@ export default function Notification() {
       return setLoadingMessages(false);
     } else {
       setSubscribed(true);
-      if (!messages) fetchMessages(sublistLocal ? sublistLocal[0] : null);
+      fetchMessages(sublistLocal ? sublistLocal[0] : null);
 
       const timer = setInterval(() => {
         poll();
