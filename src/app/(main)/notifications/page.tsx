@@ -146,7 +146,7 @@ export default function Notification() {
             <Show when="signed-in">
               <div
                 onClick={refresh}
-                className={`${!subscribed ? "hidden" : ""} select-none fixed flex items-center gap-2 z-20 backdrop-blur-xl bottom-22 right-5 text-lg rounded-full shadow-lg shadow-black/30 bg-white/10 hover:bg-white/15 transition-all //py-1.5 p-2 cursor-pointer`}
+                className={`${!subscribed ? "hidden" : ""} select-none fixed flex items-center gap-2 z-20 backdrop-blur-xl bottom-26 right-7 text-lg rounded-full shadow-lg shadow-black/30 bg-white/10 hover:bg-white/15 transition-all //py-1.5 p-2 cursor-pointer`}
               >
                 <RiRefreshLine // FaCircleNotch
                   className={`${refreshing ? "animate-spin" : ""} rotate-45`}
