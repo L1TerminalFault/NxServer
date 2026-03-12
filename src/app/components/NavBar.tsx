@@ -59,7 +59,7 @@ export default function NavBar() {
             id={`${route.href.includes(pathname) ? "followee" : ""}`}
             key={route.href}
             href={route.href}
-            className={`flex max-md:flex-col items-center justify-center gap-1.5 md:gap-3 text-lg p-1.5 px-6 //px-4 rounded-full ${route.href.includes(pathname) ? "hover:bg-transparent" : "hover:bg-white/5 text-gray-300"} transition-all items-center`}
+            className={`flex max-md:flex-col items-center justify-center gap-1.5 md:gap-3 text-lg p-1.5 px-6 //px-4 rounded-full ${route.href.includes(pathname) ? "hover:bg-transparent" : "hover:bg-white/5 text-gray-400"} transition-all items-center`}
           >
             <route.icon className="text-2xl" />
             <div className={`flex items-center max-md:text-xs justify-center`}>
