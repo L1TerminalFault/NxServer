@@ -83,7 +83,7 @@ export default function Notification() {
       return setLoadingMessages(false);
     } else {
       setSubscribed(true);
-      fetchMessages(sublistLocal ? sublistLocal[0] : null);
+      if (!messages) fetchMessages(sublistLocal ? sublistLocal[0] : null);
 
       const timer = setInterval(() => {
         poll();
