@@ -1,7 +1,9 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { Message } from "@/lib/db";
+import { Message, dbConnect } from "@/lib/db";
 
 export async function GET(request: Request) {
+  await dbConnect();
+
   const client = await clerkClient();
   const { userId } = await auth();
   const channelId = request.url.split("?channelId=")[1];

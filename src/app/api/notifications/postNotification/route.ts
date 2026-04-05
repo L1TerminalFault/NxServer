@@ -1,9 +1,11 @@
-import { Message } from "@/lib/db";
+import { Message, dbConnect } from "@/lib/db";
 import { Message as MessageType } from "@/lib/types";
 
 const MAX_DOCS = 15;
 
 export async function POST(request: Request) {
+  await dbConnect();
+
   const message: MessageType = await request.json();
 
   try {
